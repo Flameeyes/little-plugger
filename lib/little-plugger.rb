@@ -188,6 +188,13 @@ module LittlePlugger
       @loaded ||= {}
       found = {}
 
+      $:.each do |libdir|
+        Dir.glob(File.join(libdir, plugin_path, '*.rb')).each do |path|
+          name = File.basename(path, '.rb').to_sym
+          found[name] = path unless found.key? name
+        end
+      end
+
       Gem.find_files(File.join(plugin_path, '*.rb')).each do |path|
         name = File.basename(path, '.rb').to_sym
         found[name] = path unless found.key? name
